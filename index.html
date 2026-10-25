@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BCA Student Portal | JB Knowledge Park</title>
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background-color: #0f172a;
+      color: #f8fafc;
+    }
+    .glass-card {
+      background: rgba(30, 41, 59, 0.7);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between">
+
+  <!-- Header -->
+  <header class="glass-card sticky top-0 z-50 border-b border-slate-800">
+    <div class="max-w-6xl mx-auto px-4 py-4 flex justify-between items-center">
+      <div class="flex items-center space-x-3">
+        <div class="bg-indigo-600 p-2.5 rounded-xl text-white shadow-lg shadow-indigo-500/30">
+          <i class="fa-solid fa-graduation-cap text-xl"></i>
+        </div>
+        <div>
+          <h1 class="font-bold text-lg leading-tight">BCA Student Portal</h1>
+          <p class="text-xs text-slate-400">Section G • JBKP Faridabad</p>
+        </div>
+      </div>
+      <div id="userProfile" class="hidden flex items-center space-x-3">
+        <span id="userPhoneDisplay" class="text-xs bg-slate-800 px-3 py-1.5 rounded-full text-indigo-400 border border-slate-700 font-mono"></span>
+        <button id="logoutBtn" class="bg-red-500/10 hover:bg-red-500/20 text-red-400 px-3 py-1.5 rounded-lg text-xs font-semibold transition">
+          <i class="fa-solid fa-right-from-bracket mr-1"></i> Logout
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content Container -->
+  <main class="max-w-6xl mx-auto px-4 py-8 flex-grow w-full">
+
+    <!-- Auth Section (Phone Login) -->
+    <section id="authSection" class="max-w-md mx-auto my-12">
+      <div class="glass-card p-8 rounded-2xl shadow-2xl text-center border border-slate-800">
+        <div class="w-16 h-16 bg-indigo-600/10 rounded-2xl flex items-center justify-center mx-auto mb-4 text-indigo-400 text-2xl border border-indigo-500/20">
+          <i class="fa-solid fa-mobile-screen-button"></i>
+        </div>
+        <h2 class="text-2xl font-bold mb-2">Student Verification</h2>
+        <p class="text-slate-400 text-sm mb-6">Enter your phone number with country code (+91) to receive an OTP.</p>
+
+        <!-- Step 1: Phone Input Form -->
+        <div id="phoneForm" class="space-y-4">
+          <div class="relative">
+            <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-slate-400 text-sm font-semibold">+91</span>
+            <input type="tel" id="phoneNumber" placeholder="9876543210" class="w-full pl-12 pr-4 py-3 bg-slate-900 border border-slate-700 rounded-xl focus:outline-none focus:border-indigo-500 text-slate-100 placeholder-slate-500 text-sm font-medium transition">
+          </div>
+          <div id="recaptcha-container" class="flex justify-center my-2"></div>
+          <button id="sendOtpBtn" class="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-semibold py-3 rounded-xl shadow-lg shadow-indigo-600/20 transition flex items-center justify-center space-x-2">
+            <span>Send OTP Code</span>
+            <i class="fa-solid fa-arrow-right text-xs"></i>
+          </button>
+        </div>
+
+        <!-- Step 2: OTP Input Form -->
+        <div id="otpForm" class="space-y-4 hidden">
+          <input type="text" id="otpCode" placeholder="Enter 6-Digit OTP" maxlength="6" class="w-full px-4 py-3 bg-slate-900 border border-slate-700 rounded-xl text-center tracking-widest text-lg font-mono focus:outline-none focus:border-indigo-500 text-slate-100 placeholder-slate-500 transition">
+          <button id="verifyOtpBtn" class="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-semibold py-3 rounded-xl shadow-lg shadow-emerald-600/20 transition flex items-center justify-center space-x-2">
+            <span>Verify & Login</span>
+            <i class="fa-solid fa-check text-xs"></i>
+          </button>
+          <button id="resendOtpBtn" class="text-xs text-indigo-400 hover:underline">Change phone number</button>
+        </div>
+
+        <div id="authStatus" class="mt-4 text-xs font-medium min-h-[20px]"></div>
+      </div>
+    </section>
+
+    <!-- Dashboard Section (Visible After Login) -->
+    <section id="dashboardSection" class="hidden space-y-8">
+      
+      <!-- Welcome Banner -->
+      <div class="glass-card p-6 rounded-2xl border border-indigo-500/20 bg-gradient-to-r from-indigo-900/40 to-slate-900/60 relative overflow-hidden">
+        <div class="relative z-10">
+          <h2 class="text-2xl font-extrabold text-white">Welcome to BCA Section G Hub 🚀</h2>
+          <p class="text-slate-300 text-sm mt-1">Access syllabus notes, assignments, announcements & class schedules instantly.</p>
+        </div>
+      </div>
+
+      <!-- Quick Action Grid -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        
+        <!-- Announcements Card -->
+        <div class="glass-card p-6 rounded-2xl flex flex-col justify-between">
+          <div>
+            <div class="flex items-center space-x-3 mb-4">
+              <div class="p-2.5 bg-amber-500/10 text-amber-400 rounded-xl"><i class="fa-solid fa-bullhorn"></i></div>
+              <h3 class="font-bold">Latest Notice</h3>
+            </div>
+            <div id="noticeList" class="space-y-3 text-sm text-slate-300">
+              <p class="bg-slate-900/50 p-3 rounded-xl border border-slate-800 text-xs text-slate-400">Loading latest announcements...</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Assignments Card -->
+        <div class="glass-card p-6 rounded-2xl flex flex-col justify-between">
+          <div>
+            <div class="flex items-center space-x-3 mb-4">
+              <div class="p-2.5 bg-indigo-500/10 text-indigo-400 rounded-xl"><i class="fa-solid fa-book-open"></i></div>
+              <h3 class="font-bold">Assignments & Notes</h3>
+            </div>
+            <div id="assignmentList" class="space-y-3 text-sm text-slate-300">
+              <p class="bg-slate-900/50 p-3 rounded-xl border border-slate-800 text-xs text-slate-400">Loading study material...</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Class Community / Discussion -->
+        <div class="glass-card p-6 rounded-2xl flex flex-col justify-between">
+          <div>
+            <div class="flex items-center space-x-3 mb-4">
+              <div class="p-2.5 bg-emerald-500/10 text-emerald-400 rounded-xl"><i class="fa-solid fa-comments"></i></div>
+              <h3 class="font-bold">Class Community</h3>
+            </div>
+            <p class="text-xs text-slate-400 mb-4">Post updates or queries to your classmates in real-time.</p>
+            <div class="space-y-2">
+              <input type="text" id="postMsgInput" placeholder="Write a message..." class="w-full px-3 py-2 bg-slate-900 border border-slate-700 rounded-lg text-xs text-slate-100 focus:outline-none focus:border-indigo-500">
+              <button id="postMsgBtn" class="w-full bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-semibold py-2 rounded-lg transition">Post Message</button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="glass-card border-t border-slate-800 py-4 text-center text-xs text-slate-500">
+    Built for BCA Students • JB Knowledge Park
+  </footer>
+
+  <!-- Firebase Modular SDKs -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+    import { 
+      getAuth, 
+      RecaptchaVerifier, 
+      signInWithPhoneNumber, 
+      onAuthStateChanged, 
+      signOut 
+    } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+    import { 
+      getFirestore, 
+      collection, 
+      addDoc, 
+      onSnapshot, 
+      query, 
+      orderBy 
+    } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+    // Your Exact Firebase Configuration
+    const firebaseConfig = {
+      apiKey: "AIzaSyAtzUDD_z3XrJgi5eFpcRXWWCKXYeIN9IU",
+      authDomain: "bca-student-portal-bd92a.firebaseapp.com",
+      projectId: "bca-student-portal-bd92a",
+      storageBucket: "bca-student-portal-bd92a.firebasestorage.app",
+      messagingSenderId: "1091988717603",
+      appId: "1:1091988717603:web:7a1d1858bbffd7517eb196"
+    };
+
+    // Initialize Firebase Services
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+
+    // DOM Elements
+    const authSection = document.getElementById("authSection");
+    const dashboardSection = document.getElementById("dashboardSection");
+    const userProfile = document.getElementById("userProfile");
+    const userPhoneDisplay = document.getElementById("userPhoneDisplay");
+    const authStatus = document.getElementById("authStatus");
+    
+    const phoneForm = document.getElementById("phoneForm");
+    const otpForm = document.getElementById("otpForm");
+    const phoneNumberInput = document.getElementById("phoneNumber");
+    const otpCodeInput = document.getElementById("otpCode");
+    const sendOtpBtn = document.getElementById("sendOtpBtn");
+    const verifyOtpBtn = document.getElementById("verifyOtpBtn");
+    const resendOtpBtn = document.getElementById("resendOtpBtn");
+    const logoutBtn = document.getElementById("logoutBtn");
+
+    let confirmationResultObj = null;
+
+    // Invisible Recaptcha Setup
+    window.recaptchaVerifier = new RecaptchaVerifier(auth, 'recaptcha-container', {
+      'size': 'invisible',
+      'callback': (response) => {}
+    });
+
+    // Auth State Observer
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        authSection.classList.add("hidden");
+        dashboardSection.classList.remove("hidden");
+        userProfile.classList.remove("hidden");
+        userPhoneDisplay.textContent = user.phoneNumber || "Verified Student";
+        loadDashboardData();
+      } else {
+        authSection.classList.remove("hidden");
+        dashboardSection.classList.add("hidden");
+        userProfile.classList.add("hidden");
+      }
+    });
+
+    // Send OTP Handler
+    sendOtpBtn.addEventListener("click", async () => {
+      const rawNum = phoneNumberInput.value.trim();
+      if (!rawNum || rawNum.length < 10) {
+        showStatus("Please enter a valid 10-digit phone number.", "text-red-400");
+        return;
+      }
+
+      const fullNum = "+91" + rawNum.replace(/\D/g, '').slice(-10);
+      showStatus("Sending OTP...", "text-indigo-400");
+
+      try {
+        const appVerifier = window.recaptchaVerifier;
+        confirmationResultObj = await signInWithPhoneNumber(auth, fullNum, appVerifier);
+        phoneForm.classList.add("hidden");
+        otpForm.classList.
